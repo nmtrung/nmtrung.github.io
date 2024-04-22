@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang=vi>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Environment Ubuntu 17.04 Apache 2.4.25 Git 2.11.0  Tạo user deployTừ user root tạo mới và login vào user deploy useradd --create-home -s /bin/bash deploysu -l deploy Config sshmkdir ~/.sshtouch ~/.ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Turn your VPS into a git repository">
+<meta property="og:url" content="https://nmtrung.com/turn-vps-into-a-git-repository/index.html">
+<meta property="og:site_name" content="Blog nmtrung">
+<meta property="og:description" content="Environment Ubuntu 17.04 Apache 2.4.25 Git 2.11.0  Tạo user deployTừ user root tạo mới và login vào user deploy useradd --create-home -s /bin/bash deploysu -l deploy Config sshmkdir ~/.sshtouch ~/.ssh">
+<meta property="og:locale" content="vi">
+<meta property="og:image" content="https://nmtrung.com/images/logo.png">
+<meta property="og:updated_time" content="2020-02-23T06:07:30.818Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Turn your VPS into a git repository">
+<meta name="twitter:description" content="Environment Ubuntu 17.04 Apache 2.4.25 Git 2.11.0  Tạo user deployTừ user root tạo mới và login vào user deploy useradd --create-home -s /bin/bash deploysu -l deploy Config sshmkdir ~/.sshtouch ~/.ssh">
+<meta name="twitter:image" content="https://nmtrung.com/images/logo.png">
+<meta property="fb:app_id" content="111005339496900">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon_cactus.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    
+      <title>Turn your VPS into a git repository | Blog nmtrung</title>
+    
+    <!-- styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=vietnamese" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/voz-next/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/tong-hop-sticker-imgur/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+      <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://nmtrung.com/turn-vps-into-a-git-repository/"><i class="fa fa-facebook "
+                        aria-hidden="true"></i></a></li>
+      <li><a class="icon" href="https://twitter.com/share?url=https://nmtrung.com/turn-vps-into-a-git-repository/&text=Turn your VPS into a git repository"><i class="fa fa-twitter "
+                        aria-hidden="true"></i></a></li>
+      <li><a class="icon" href="http://reddit.com/submit?url=https://nmtrung.com/turn-vps-into-a-git-repository/&title=Turn your VPS into a git repository"><i class="fa fa-reddit "
+                        aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment"><span class="toc-number">1.</span> <span class="toc-text">Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-user-deploy"><span class="toc-number">2.</span> <span class="toc-text">Tạo user deploy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Config-ssh"><span class="toc-number">3.</span> <span class="toc-text">Config ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-source-code-directory"><span class="toc-number">4.</span> <span class="toc-text">Tạo source code directory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-git-hook"><span class="toc-number">5.</span> <span class="toc-text">Tạo git hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Push-source-code"><span class="toc-number">6.</span> <span class="toc-text">Push source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comments"><span class="toc-number">7.</span> <span class="toc-text">Comments</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Turn your VPS into a git repository
+    </h1>
+
+
+
+    <div class="meta">
+      <!--<span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">
+          
+          Blog nmtrung
+          </span>
+      </span>-->
+      
+    <div class="postdate">
+        <time datetime="2020-02-15T18:51:00.000Z" itemprop="datePublished">16/02/2020</time>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><ul>
+<li>Ubuntu 17.04</li>
+<li>Apache 2.4.25</li>
+<li>Git 2.11.0</li>
+</ul>
+<h2 id="Tao-user-deploy"><a href="#Tao-user-deploy" class="headerlink" title="Tạo user deploy"></a>Tạo user deploy</h2><p>Từ user <code>root</code> tạo mới và login vào user <code>deploy</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">useradd --create-home -s /bin/bash deploy</span><br><span class="line"></span><br><span class="line">su -l deploy</span><br></pre></td></tr></table></figure>
+<h2 id="Config-ssh"><a href="#Config-ssh" class="headerlink" title="Config ssh"></a>Config ssh</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir ~/.ssh</span><br><span class="line"></span><br><span class="line">touch ~/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">chmod 700 ~/.ssh</span><br><span class="line"></span><br><span class="line">chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<p>Thêm khóa <code>id_rsa.pub</code> của bạn vào file <code>authorized_keys</code></p>
+<p>Login vào user <code>root</code>, mở file <code>/etc/ssh/sshd_config</code> thêm</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Match Group deploy</span><br><span class="line">    PasswordAuthentication no</span><br><span class="line">    #ChallengeResponseAuthentication no (chỉ chuyển sang no nếu là yes)</span><br></pre></td></tr></table></figure>
+<p>Restart ssh server</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service ssh restart</span><br></pre></td></tr></table></figure>
+<h2 id="Tao-source-code-directory"><a href="#Tao-source-code-directory" class="headerlink" title="Tạo source code directory"></a>Tạo source code directory</h2><p>Tạo thư mục chứa source code và chuyển quyền owner cho user <code>deploy</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir /var/www/ccn</span><br><span class="line"></span><br><span class="line">chown -hR deploy:deploy /var/www/ccn</span><br></pre></td></tr></table></figure>
+<p>Thêm user <code>www-data</code> vào group <code>deploy</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">usermod -a -G deploy www-data</span><br></pre></td></tr></table></figure>
+<h2 id="Tao-git-hook"><a href="#Tao-git-hook" class="headerlink" title="Tạo git hook"></a>Tạo git hook</h2><p>Login vào user <code>deploy</code>, tạo git directory</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init --bare coconut.git</span><br><span class="line"></span><br><span class="line">cd ~/coconut.git/hooks</span><br></pre></td></tr></table></figure>
+<p>Tạo file <code>post-receive</code> với nội dung sau</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"></span><br><span class="line">SOURCE_DIR=&quot;/var/www/ccn&quot;</span><br><span class="line">GIT_DIR=&quot;/home/deploy/coconut.git&quot;</span><br><span class="line"></span><br><span class="line">while read oldrev newrev refname</span><br><span class="line">do</span><br><span class="line">    branch=$(git rev-parse --symbolic --abbrev-ref $refname)</span><br><span class="line">    git --work-tree=$SOURCE_DIR --git-dir=$GIT_DIR checkout -f $branch</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>Cấp quyền thực thi cho file <code>post-receive</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">chmod +x post-receive</span><br></pre></td></tr></table></figure>
+<h2 id="Push-source-code"><a href="#Push-source-code" class="headerlink" title="Push source code"></a>Push source code</h2><p>Push source code lên vps và cài đặt vendor</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /var/www/ccn</span><br><span class="line"></span><br><span class="line">composer install --optimize-autoloader --no-dev</span><br></pre></td></tr></table></figure>
+<p>Đổi quyền</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find /var/www/ccn -type d -exec chmod 755 &#123;&#125; +</span><br><span class="line"></span><br><span class="line">find /var/www/ccn -type f -exec chmod 644 &#123;&#125; +</span><br></pre></td></tr></table></figure>
+<p>Done!!!</p>
+<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2>
+    <div class="fb-like" data-href="https://nmtrung.com/turn-vps-into-a-git-repository/" data-width="300" data-layout="standard"
+      data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
+    <div class="fb-comments" data-href="https://nmtrung.com/turn-vps-into-a-git-repository/" data-order-by="reverse_time"
+      data-numposts="5" data-width="100%"></div>
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment"><span class="toc-number">1.</span> <span class="toc-text">Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-user-deploy"><span class="toc-number">2.</span> <span class="toc-text">Tạo user deploy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Config-ssh"><span class="toc-number">3.</span> <span class="toc-text">Config ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-source-code-directory"><span class="toc-number">4.</span> <span class="toc-text">Tạo source code directory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tao-git-hook"><span class="toc-number">5.</span> <span class="toc-text">Tạo git hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Push-source-code"><span class="toc-number">6.</span> <span class="toc-text">Push source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comments"><span class="toc-number">7.</span> <span class="toc-text">Comments</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+      <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://nmtrung.com/turn-vps-into-a-git-repository/"><i class="fa fa-facebook fa-lg"
+                        aria-hidden="true"></i></a></li>
+      <li><a class="icon" href="https://twitter.com/share?url=https://nmtrung.com/turn-vps-into-a-git-repository/&text=Turn your VPS into a git repository"><i class="fa fa-twitter fa-lg"
+                        aria-hidden="true"></i></a></li>
+      <li><a class="icon" href="http://reddit.com/submit?url=https://nmtrung.com/turn-vps-into-a-git-repository/&title=Turn your VPS into a git repository"><i class="fa fa-reddit fa-lg"
+                        aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2024 nmtrung
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script>
+    var app = app || {};
+    app.viewport_width = (window.innerWidth > 0) ? window.innerWidth : window.screen.width;
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<div id="fb-root"></div>
+<script>
+    function loadComments() {
+        var js = document.createElement('script');
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=111005339496900";
+        document.body.appendChild(js);
+    }
+
+    function triggerLoadComments(isForce) {
+        isForce = (typeof isForce !== 'undefined') ? isForce : false;
+
+        if (window.onscroll || isForce) {
+            loadComments();
+            window.onscroll = null;
+            console.log('Comments loaded!');
+        }
+    }
+
+    var fbComments = document.getElementById('Comments');
+
+    if (fbComments) {
+        if (app.viewport_width < 576) {
+            triggerLoadComments(true);
+        } else {
+            window.onscroll = function () {
+                if (fbComments.getBoundingClientRect().top < window.innerHeight) {
+                    triggerLoadComments();
+                }
+            }
+
+            setTimeout(triggerLoadComments, 3000);
+        }
+    }
+</script>
+
+
+
+</body>
+</html>
