@@ -1067,7 +1067,7 @@ article header .author {
   font-weight: 700;
 }
 article header .postdate {
-  display: inline;
+  display: block;
 }
 article .content h2:before {
   content: "#";
